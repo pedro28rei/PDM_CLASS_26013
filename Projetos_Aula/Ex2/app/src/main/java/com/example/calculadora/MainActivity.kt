@@ -162,9 +162,3 @@ fun CalculatorInterface() {
     }
 }
 
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-        CalculatorInterface()
-}
