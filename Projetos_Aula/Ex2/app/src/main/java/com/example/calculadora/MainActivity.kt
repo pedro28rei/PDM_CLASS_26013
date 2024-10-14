@@ -22,6 +22,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.calculadora.ui.CalculatorButton
 import com.example.calculadora.ui.theme.CalculadoraTheme
 
 class MainActivity : ComponentActivity() {
@@ -56,6 +59,9 @@ fun ButtonStyle(): Modifier {
 
 @Composable
 fun CalculatorInterface() {
+
+    val result = remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -82,103 +88,103 @@ fun CalculatorInterface() {
             Spacer(modifier = Modifier.height(20.dp))
 
                 Row {
-                    Button(onClick = { println("Button √ clicked") }) {
-                        Text("√")
+                    CalculatorButton(label = "√") { value ->
+                        result.value += value
                     }
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    Button(onClick = { println("Button % clicked") }) {
-                        Text("%")
+                    CalculatorButton(label = "%") { value ->
+                        result.value += value
                     }
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    Button(onClick = { println("Button +/- clicked") }) {
-                        Text("+/-")
+                    CalculatorButton(label = "+/-") { value ->
+                        result.value += value
                     }
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    Button(onClick = { println("Button CE clicked") }) {
-                        Text("CE")
+                    CalculatorButton(label = "CE") { value ->
+                        result.value += value
                     }
                 }
                 Row {
-                    Button(onClick = { println("Button 7 clicked") }) {
-                        Text("7")
+                    CalculatorButton(label = "7") { value ->
+                        result.value += value
                     }
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    Button(onClick = { println("Button 8 clicked") }) {
-                        Text("8")
+                    CalculatorButton(label = "8") { value ->
+                        result.value += value
                     }
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    Button(onClick = { println("Button 9 clicked") }) {
-                        Text("9")
+                    CalculatorButton(label = "9") { value ->
+                        result.value += value
                     }
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    Button(onClick = { println("Button / clicked") }) {
-                        Text("/")
+                    CalculatorButton(label = "/") { value ->
+                        result.value += value
                     }
                 }
                 Row {
-                    Button(onClick = { println("Button 6 clicked") }) {
-                        Text("4")
+                    CalculatorButton(label = "4") { value ->
+                        result.value += value
                     }
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    Button(onClick = { println("Button 8 clicked") }) {
-                        Text("5")
+                    CalculatorButton(label = "5") { value ->
+                        result.value += value
                     }
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    Button(onClick = { println("Button 9 clicked") }) {
-                        Text("6")
+                    CalculatorButton(label = "6") { value ->
+                        result.value += value
                     }
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    Button(onClick = { println("Button % clicked") }) {
-                        Text("x")
+                    CalculatorButton(label = "%") { value ->
+                        result.value += value
                     }
                 }
                 Row {
-                    Button(onClick = { println("Button 7 clicked") }) {
-                        Text("1")
+                    CalculatorButton(label = "1") { value ->
+                        result.value += value
                     }
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    Button(onClick = { println("Button 8 clicked") }) {
-                        Text("2")
+                    CalculatorButton(label = "2") { value ->
+                        result.value += value
                     }
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    Button(onClick = { println("Button 9 clicked") }) {
-                        Text("3")
+                    CalculatorButton(label = "3") { value ->
+                        result.value += value
                     }
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    Button(onClick = { println("Button % clicked") }) {
-                        Text("-")
+                    CalculatorButton(label = "-") { value ->
+                        result.value += value
                     }
                 }
                 Row {
-                    Button(onClick = { println("Button 0 clicked") }) {
-                        Text("0")
+                    CalculatorButton(label = "0") { value ->
+                        result.value += value
                     }
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    Button(onClick = { println("Button . clicked") }) {
-                        Text(".")
+                    CalculatorButton(label = ".") { value ->
+                        result.value += value
                     }
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    Button(onClick = { println("Button = clicked") }) {
-                        Text("=")
+                    CalculatorButton(label = "=") { value ->
+                        result.value += value
                     }
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    Button(onClick = { println("Button + clicked") }) {
-                        Text("+")
+                    CalculatorButton(label = "+") { value ->
+                        result.value += value
                     }
                 }
 
