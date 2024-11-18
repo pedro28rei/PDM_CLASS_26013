@@ -16,39 +16,38 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.calculadora.ui.theme.CalculadoraTheme
 import kotlin.math.sqrt
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CalculadoraTheme {
-                CalculatorInterface()
-            }
+            CalculatorInterface()
         }
     }
 }
 
+// Function that will present calculator interface for the user
 @Composable
 fun CalculatorInterface() {
     val operation = remember { mutableStateOf("") }
     val result = remember { mutableStateOf("") }
+    val isOperatorClicked = remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
-            .background(Color(0xFFE0E0E0)) // Cor de fundo para a calculadora
-            .border(2.dp, Color(0xFF000000), RoundedCornerShape(8.dp)) // Borda preta com cantos arredondados
+            .background(Color(0xFFE0E0E0))
+            .border(2.dp, Color(0xFF000000), RoundedCornerShape(8.dp))
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize() // Preenche o espaço disponível dentro do Box
-                .padding(8.dp), // Ajuste do padding para que o conteúdo tenha espaço interno
-            verticalArrangement = Arrangement.Top, // Ajuste a posição para o topo
+                .fillMaxSize()
+                .padding(8.dp),
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Calculadora",
+                text = "Calculator",
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
@@ -56,7 +55,7 @@ fun CalculatorInterface() {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Visor da calculadora
+            // Calculator display
             Box(
                 modifier = Modifier
                     .width(300.dp)
@@ -74,220 +73,178 @@ fun CalculatorInterface() {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-// Primeira Linha de Botões
+            // Calculator buttons (line 1)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 CalculatorButton("√", onClick = {
                     if (operation.value.isNotEmpty()) {
-                        val number = operation.value.toDoubleOrNull()
-                        result.value =
-                            if (number != null && number >= 0) sqrt(number).toString() else "Erro"
+                        val number = result.value.toDoubleOrNull() ?: 0.0
+                        result.value = if (number >= 0) sqrt(number).toString() else "Erro"
+                        operation.value = result.value
+                    } },
+                    color = Color(0xFF000000)
+                )
+                CalculatorButton("%",
+                    onClick = {},
+                    color = Color(0xFF000000)
+                )
+                CalculatorButton("+/-",
+                    onClick = {},
+                    color = Color(0xFF000000)
+                )
+                CalculatorButton("CE",
+                    onClick = {
+                        operation.value = ""
+                        result.value = "" },
+                    color = Color(0xFFFF0000)
+                )
+            }
+
+            // Calculator buttons (line 2, 3, 4 and 5)
+            val buttons = listOf(
+                listOf("7", "8", "9", "/"),
+                listOf("4", "5", "6", "*"),
+                listOf("1", "2", "3", "-"),
+                listOf("0", ".", "=", "+")
+            )
+
+            // Create 1 row for each line of buttons
+            for (row in buttons) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    // Create a button for each item on the line
+                    for (item in row) {
+                        CalculatorButton(
+                            label = item,
+                            onClick = {
+                                // Calculate the result if button clicked is "="
+                                when (item) { "=" -> {
+                                        result.value = evaluateExpression(operation.value)
+                                        operation.value = result.value
+                                        isOperatorClicked.value = false
+                                    }
+                                    "+", "-", "*", "/" -> {
+                                        if (!isOperatorClicked.value) {
+                                            operation.value += item
+                                            isOperatorClicked.value = true
+                                        }
+                                    }
+                                    else -> {
+                                        if (isOperatorClicked.value) {
+                                            result.value = item
+                                            isOperatorClicked.value = false
+                                        } else {
+                                            result.value += item
+                                        }
+                                        operation.value += item
+                                    }
+                                }
+                            },
+                            color = if (item in listOf("+", "-", "*", "/", "=")) Color(0xFF000000) else Color(0xFF696969)
+                        )
                     }
-                }, color = Color(0xFF000000))
-
-                CalculatorButton(
-                    "%",
-                    onClick = { operation.value += "%" },
-                    color = Color(0xFF000000)
-                )
-
-                CalculatorButton("+/-", onClick = {
-                    if (operation.value.isNotEmpty() && operation.value.first() != '-') {
-                        operation.value = "-${operation.value}"
-                    } else if (operation.value.startsWith("-")) {
-                        operation.value = operation.value.drop(1)
-                    }
-                }, color = Color(0xFF000000))
-
-                CalculatorButton("CE", onClick = {
-                    operation.value = operation.value.dropLast(1)
-                }, color = Color(0xFFFF0000))
-            }
-
-// Segunda Linha de Botões
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                CalculatorButton(
-                    "7",
-                    onClick = { operation.value += "7" },
-                    color = Color(0xFF696969)
-                )
-                CalculatorButton(
-                    "8",
-                    onClick = { operation.value += "8" },
-                    color = Color(0xFF696969)
-                )
-                CalculatorButton(
-                    "9",
-                    onClick = { operation.value += "9" },
-                    color = Color(0xFF696969)
-                )
-                CalculatorButton(
-                    "/",
-                    onClick = { operation.value += "/" },
-                    color = Color(0xFF000000)
-                )
-            }
-
-// Terceira Linha de Botões
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                CalculatorButton(
-                    "4",
-                    onClick = { operation.value += "4" },
-                    color = Color(0xFF696969)
-                )
-                CalculatorButton(
-                    "5",
-                    onClick = { operation.value += "5" },
-                    color = Color(0xFF696969)
-                )
-                CalculatorButton(
-                    "6",
-                    onClick = { operation.value += "6" },
-                    color = Color(0xFF696969)
-                )
-                CalculatorButton(
-                    "*",
-                    onClick = { operation.value += "*" },
-                    color = Color(0xFF000000)
-                )
-            }
-
-// Quarta Linha de Botões
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                CalculatorButton(
-                    "1",
-                    onClick = { operation.value += "1" },
-                    color = Color(0xFF696969)
-                )
-                CalculatorButton(
-                    "2",
-                    onClick = { operation.value += "2" },
-                    color = Color(0xFF696969)
-                )
-                CalculatorButton(
-                    "3",
-                    onClick = { operation.value += "3" },
-                    color = Color(0xFF696969)
-                )
-                CalculatorButton(
-                    "-",
-                    onClick = { operation.value += "-" },
-                    color = Color(0xFF000000)
-                )
-            }
-
-// Quinta Linha de Botões
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                CalculatorButton(
-                    "0",
-                    onClick = { operation.value += "0" },
-                    color = Color(0xFF696969)
-                )
-                CalculatorButton(
-                    ".",
-                    onClick = { operation.value += "." },
-                    color = Color(0xFF696969)
-                )
-                CalculatorButton("=", onClick = {
-                    result.value = evaluateExpression(operation.value)
-                    operation.value = ""
-                }, color = Color(0xFF696969))
-                CalculatorButton(
-                    "+",
-                    onClick = { operation.value += "+" },
-                    color = Color(0xFF000000)
-                )
+                }
             }
         }
     }
 }
 
-// Função para analisar e calcular a expressão
+// Function that analise the expression and calculate the result
 fun evaluateExpression(expression: String): String {
     return try {
-        val tokens = parseTokens(expression.replace("%", "/100"))
-        val result = calculate(tokens)
+        val sanitizedExpression = expression.replace("%", "/100")
+        val result = calculateExpression(sanitizedExpression)
         result.toString()
     } catch (e: Exception) {
         "Erro"
     }
 }
 
-// Função para analisar tokens da expressão
-fun parseTokens(expression: String): MutableList<String> {
-    val tokens = mutableListOf<String>()
-    var currentNumber = StringBuilder()
-    for (char in expression) {
-        when (char) {
-            '+', '-', '*', '/' -> {
-                if (currentNumber.isNotEmpty()) {
-                    tokens.add(currentNumber.toString())
-                    currentNumber = StringBuilder()
-                }
-                tokens.add(char.toString())
-            }
-            else -> currentNumber.append(char)
-        }
-    }
-    if (currentNumber.isNotEmpty()) tokens.add(currentNumber.toString())
-    return tokens
-}
+// Function that calculate the expression
+fun calculateExpression(expression: String): Double {
+    val tokens = parseTokens(expression)
+    if (tokens.isEmpty()) return 0.0
 
-// Função para calcular o resultado
-fun calculate(tokens: MutableList<String>): Double {
     val numbers = mutableListOf<Double>()
-    val operators = mutableListOf<String>()
+    val operators = mutableListOf<Char>()
 
     var i = 0
     while (i < tokens.size) {
         val token = tokens[i]
-        when (token) {
-            "+" -> operators.add(token)
-            "-" -> operators.add(token)
-            "*" -> operators.add(token)
-            "/" -> operators.add(token)
-            else -> numbers.add(token.toDouble())
-        }
-
-        if (operators.size > 0 && numbers.size >= 2) {
-            val operator = operators.removeAt(operators.size - 1)
-            val secondOperand = numbers.removeAt(numbers.size - 1)
-            val firstOperand = numbers.removeAt(numbers.size - 1)
-
-            val result = when (operator) {
-                "+" -> firstOperand + secondOperand
-                "-" -> firstOperand - secondOperand
-                "*" -> firstOperand * secondOperand
-                "/" -> firstOperand / secondOperand
-                else -> 0.0
+        when {
+            token.first().isDigit() || token.first() == '.' -> numbers.add(token.toDouble())
+            token in listOf("+", "-", "*", "/") -> {
+                while (operators.isNotEmpty() && precedence(operators.last()) >= precedence(token.first())) {
+                    processOperation(numbers, operators)
+                }
+                operators.add(token.first())
             }
-            numbers.add(result)
         }
-
         i++
+    }
+
+    while (operators.isNotEmpty()) {
+        processOperation(numbers, operators)
     }
 
     return numbers.first()
 }
 
+// Function that will process the operation
+fun processOperation(numbers: MutableList<Double>, operators: MutableList<Char>) {
+    if (numbers.size < 2 || operators.isEmpty()) return
 
-// Function that will create calculator buttons, receives button label and color as arguments
+    val second = numbers.removeAt(numbers.lastIndex)
+    val first = numbers.removeAt(numbers.lastIndex)
+    val operator = operators.removeAt(operators.lastIndex)
+
+    val result = when (operator) {
+        '+' -> first + second
+        '-' -> first - second
+        '*' -> first * second
+        '/' -> if (second != 0.0) first / second else Double.NaN
+        else -> 0.0
+    }
+
+    numbers.add(result)
+}
+
+// Operators precedence
+fun precedence(operator: Char): Int {
+    return when (operator) {
+        '+', '-' -> 1
+        '*', '/' -> 2
+        else -> 0
+    }
+}
+
+// Function that will analise the tokens
+fun parseTokens(expression: String): List<String> {
+    val tokens = mutableListOf<String>()
+    var currentToken = StringBuilder()
+
+    for (char in expression) {
+        when {
+            char.isDigit() || char == '.' -> currentToken.append(char)
+            char in listOf('+', '-', '*', '/') -> {
+                if (currentToken.isNotEmpty()) tokens.add(currentToken.toString())
+                tokens.add(char.toString())
+                currentToken = StringBuilder()
+            }
+        }
+    }
+
+    if (currentToken.isNotEmpty()) tokens.add(currentToken.toString())
+    return tokens
+}
+
+// Function that create calculator buttons, receives button label, color, and action as arguments
 @Composable
-fun CalculatorButton(label: String, onClick: () -> Unit, color: Color) {
+fun CalculatorButton(label: String, color: Color, onClick: () -> Unit) {
     Button(
         onClick = onClick,
         modifier = Modifier
@@ -304,7 +261,5 @@ fun CalculatorButton(label: String, onClick: () -> Unit, color: Color) {
         )
     }
 }
-
-
 
 
