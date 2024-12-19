@@ -1,4 +1,4 @@
-# PDM24_26013 - Projects of Mobile Device Programming curricular unit.
+# PDM24_26013 - Projects of Mobile Device Programming
 Repository created to host the projects developed in the classroom for evaluation purposes.
 
 ## > Projects:
