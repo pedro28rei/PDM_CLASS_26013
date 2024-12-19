@@ -4,7 +4,7 @@ Repository created to host the projects developed in the classroom for evaluatio
 ## >Projects:
 - Calculator;
 - NewsAPP;
-- 
+- ShoppingApp
 
 ## >Developer:
 - Pedro Daniel Fernandes Rei (a26013)
