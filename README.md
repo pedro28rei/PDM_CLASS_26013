@@ -1,10 +1,10 @@
-# PDM24_26013 - Projects
+# PDM24_26013 - Projects of Mobile Device Programming curricular unit.
 Repository created to host the projects developed in the classroom for evaluation purposes.
 
-## >Projects:
+## > Projects:
 - Calculator;
 - NewsAPP;
-- ShoppingApp
+- ShoppingApp;
 
-## >Developer:
+## > Developer:
 - Pedro Daniel Fernandes Rei (a26013)
