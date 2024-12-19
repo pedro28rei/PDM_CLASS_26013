@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.example.newsapp.presentation.view_models.bestnewsViewModel
 
 @Composable
-fun bestnewsScreen(viewModel: bestnewsViewModel){
+fun BestnewsScreen(viewModel: bestnewsViewModel){
 
     LaunchedEffect(Unit) {
         viewModel.searchnews()
