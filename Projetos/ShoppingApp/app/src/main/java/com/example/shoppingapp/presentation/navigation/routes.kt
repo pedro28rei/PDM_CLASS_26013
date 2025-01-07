@@ -9,4 +9,5 @@ object Routes {
     const val PRODUCT = "product"
     const val SHOPPINGCAR = "shoppingcar"
     const val PAYMENT = "payment"
+    const val LISTUSERS = "listUsers"
 }

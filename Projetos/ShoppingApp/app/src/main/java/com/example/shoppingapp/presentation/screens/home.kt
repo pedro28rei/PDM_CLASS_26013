@@ -59,7 +59,7 @@ fun HomeScreen(navController: NavController) {
             CustomButton(
                 label = "Shop Cart",
                 color = Color.Black,
-                onClick = {navController.navigate(Routes.PRODUCT) },
+                onClick = {navController.navigate(Routes.LISTUSERS) },
                 modifier = Modifier
             )
         }

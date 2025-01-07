@@ -11,14 +11,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.shoppingapp.presentation.navigation.AppNavigation
+import com.example.shoppingapp.presentation.screens.listUsersScreen
+import com.example.shoppingapp.presentation.viewmodels.DataViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            AppNavigation()
+
+            val dataViewModel: DataViewModel = viewModel()
+
+            listUsersScreen(dataViewModel = dataViewModel)
+            //AppNavigation()
                 }
             }
 }
