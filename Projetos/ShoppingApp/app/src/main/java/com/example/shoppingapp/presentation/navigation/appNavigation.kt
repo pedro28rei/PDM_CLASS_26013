@@ -19,6 +19,7 @@ import com.example.shoppingapp.presentation.screens.TesteScreen
 import com.example.shoppingapp.presentation.viewmodels.AuthViewModel
 import com.example.shoppingapp.presentation.viewmodels.DataViewModel
 import com.example.shoppingapp.presentation.viewmodels.ProductViewModel
+import com.example.shoppingapp.presentation.viewmodels.PurchaseViewModel
 
 @Composable
 fun AppNavigation(
@@ -26,6 +27,7 @@ fun AppNavigation(
     authViewModel: AuthViewModel,
     dataViewModel: DataViewModel,
     productViewModel: ProductViewModel,
+    purchaseViewModel: PurchaseViewModel,
     navController: NavHostController = rememberNavController()
 ) {
 
@@ -76,7 +78,7 @@ fun AppNavigation(
 
         // Screen for Tests
         composable(Routes.TESTESCREEN) {
-            TesteScreen(dataViewModel = dataViewModel, productViewModel = productViewModel)
+            TesteScreen(dataViewModel = dataViewModel, productViewModel = productViewModel, purchaseViewModel = purchaseViewModel)
         }
     }
 }

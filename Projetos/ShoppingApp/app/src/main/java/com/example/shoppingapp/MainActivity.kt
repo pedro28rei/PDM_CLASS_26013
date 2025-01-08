@@ -17,6 +17,7 @@ import com.example.shoppingapp.presentation.screens.TesteScreen
 import com.example.shoppingapp.presentation.viewmodels.AuthViewModel
 import com.example.shoppingapp.presentation.viewmodels.DataViewModel
 import com.example.shoppingapp.presentation.viewmodels.ProductViewModel
+import com.example.shoppingapp.presentation.viewmodels.PurchaseViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,14 +27,17 @@ class MainActivity : ComponentActivity() {
 
             val dataViewModel: DataViewModel = viewModel()
             val productViewModel: ProductViewModel = viewModel()
+            val purchaseViewModel: PurchaseViewModel = viewModel()
             val authViewModel: AuthViewModel = viewModel()
+
 
 
             //TesteScreen(dataViewModel = dataViewModel, productViewModel = productViewModel)
             AppNavigation(
                 authViewModel = authViewModel,
                 dataViewModel = dataViewModel,
-                productViewModel = productViewModel
+                productViewModel = productViewModel,
+                purchaseViewModel = purchaseViewModel
             )
                 }
             }
