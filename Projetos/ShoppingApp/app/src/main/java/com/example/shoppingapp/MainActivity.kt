@@ -14,9 +14,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.shoppingapp.presentation.navigation.AppNavigation
 import com.example.shoppingapp.presentation.screens.TesteScreen
-import com.example.shoppingapp.presentation.screens.listUsersScreen
 import com.example.shoppingapp.presentation.viewmodels.AuthViewModel
 import com.example.shoppingapp.presentation.viewmodels.DataViewModel
+import com.example.shoppingapp.presentation.viewmodels.ProductViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,10 +25,16 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             val dataViewModel: DataViewModel = viewModel()
+            val productViewModel: ProductViewModel = viewModel()
             val authViewModel: AuthViewModel = viewModel()
 
-            TesteScreen(dataViewModel = dataViewModel)
-            //AppNavigation(authViewModel = authViewModel)
+
+            //TesteScreen(dataViewModel = dataViewModel, productViewModel = productViewModel)
+            AppNavigation(
+                authViewModel = authViewModel,
+                dataViewModel = dataViewModel,
+                productViewModel = productViewModel
+            )
                 }
             }
 }

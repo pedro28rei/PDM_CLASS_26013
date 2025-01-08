@@ -73,7 +73,7 @@ fun HomeScreen(modifier: Modifier = Modifier, authViewModel: AuthViewModel, navC
             CustomButton(
                 label = "Shop Cart",
                 color = Color.Black,
-                onClick = {navController.navigate(Routes.LISTUSERS) },
+                onClick = {navController.navigate(Routes.TESTESCREEN) },
                 modifier = Modifier
             )
         }

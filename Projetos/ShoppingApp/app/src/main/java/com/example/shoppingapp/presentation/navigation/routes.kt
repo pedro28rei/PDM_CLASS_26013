@@ -9,6 +9,6 @@ object Routes {
     const val PRODUCT = "product"
     const val SHOPPINGCAR = "shoppingcar"
     const val PAYMENT = "payment"
-    const val LISTUSERS = "listUsers"
     const val REGIST = "regist"
+    const val TESTESCREEN = "teste"
 }

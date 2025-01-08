@@ -15,12 +15,17 @@ import com.example.shoppingapp.presentation.screens.ProductScreen
 import com.example.shoppingapp.presentation.screens.RegistScreen
 import com.example.shoppingapp.presentation.screens.ShoppingCarScreen
 import com.example.shoppingapp.presentation.screens.StartScreen
+import com.example.shoppingapp.presentation.screens.TesteScreen
 import com.example.shoppingapp.presentation.viewmodels.AuthViewModel
+import com.example.shoppingapp.presentation.viewmodels.DataViewModel
+import com.example.shoppingapp.presentation.viewmodels.ProductViewModel
 
 @Composable
 fun AppNavigation(
     modifier: Modifier = Modifier,
     authViewModel: AuthViewModel,
+    dataViewModel: DataViewModel,
+    productViewModel: ProductViewModel,
     navController: NavHostController = rememberNavController()
 ) {
 
@@ -60,11 +65,6 @@ fun AppNavigation(
         }
 
         // Screen Payment
-        composable(Routes.LISTUSERS) {
-            PaymentScreen(navController)
-        }
-
-        // Screen Payment
         composable(Routes.PAYMENT) {
             PaymentScreen(navController)
         }
@@ -72,6 +72,11 @@ fun AppNavigation(
         // Screen Regist
         composable(Routes.REGIST) {
             RegistScreen(navController = navController, authViewModel = authViewModel)
+        }
+
+        // Screen for Tests
+        composable(Routes.TESTESCREEN) {
+            TesteScreen(dataViewModel = dataViewModel, productViewModel = productViewModel)
         }
     }
 }

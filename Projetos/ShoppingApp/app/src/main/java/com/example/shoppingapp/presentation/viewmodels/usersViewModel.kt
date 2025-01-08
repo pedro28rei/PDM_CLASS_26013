@@ -5,44 +5,62 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.shoppingapp.firebase.models.Users
-import  com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
+// ViewModel responsible for fetching and managing user data.
+class DataViewModel : ViewModel() {
 
-class DataViewModel: ViewModel()  {
-    val state = mutableStateOf(Users())
+    val state = mutableStateOf<List<Users>>(emptyList())
+    val loading = mutableStateOf(false)
+    val error = mutableStateOf<String?>(null)
 
+    // Initialization block to fetch data when the ViewModel is created
     init {
         getData()
     }
 
-    private fun getData(){
+    // Function to fetch user data from Firestore asynchronously.
+    private fun getData() {
         viewModelScope.launch {
-            state.value = getDataFromFireStore()
-
+            loading.value = true
+            try {
+                state.value = getDataFromFireStore()
+            } catch (e: Exception) {
+                error.value = e.message
+            } finally {
+                loading.value = false
+            }
         }
     }
 }
 
-
-suspend fun getDataFromFireStore(): Users {
+// Function to fetch all users from Firestore and return as a list.
+suspend fun getDataFromFireStore(): List<Users> {
     val db = FirebaseFirestore.getInstance()
-    var users = Users()
+    val usersList = mutableListOf<Users>()
 
     try {
-        db.collection("Users").get().await().map {
-            val result = it.toObject(Users::class.java)
-            users = result
+        val result = db.collection("Users").get().await()
+        if (result.isEmpty) {
+            throw FirebaseFirestoreException("No users found", FirebaseFirestoreException.Code.NOT_FOUND)
+        }
+
+        for (document in result.documents) {
+            val user = document.toObject(Users::class.java)
+            if (user != null) {
+                usersList.add(user)
+            }
         }
     } catch (e: FirebaseFirestoreException) {
-
-        Log.d("error", "getDataFromFiraStore: $e")
-
-
+        Log.d("error", "getDataFromFireStore: $e")
+        throw e
     }
 
-    return users
+    return usersList
 }
+
+
 
