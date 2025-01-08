@@ -25,7 +25,7 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-
+    // Function to login the user
     fun login(email : String, password : String) {
 
 
@@ -46,6 +46,7 @@ class AuthViewModel : ViewModel() {
             }
     }
 
+    // Function to signup the user
     fun signup(email : String, password : String){
 
 
@@ -66,7 +67,10 @@ class AuthViewModel : ViewModel() {
 
     }
 
+    // Function to signout the user
     fun signout(){
+        auth.signOut()
+        _authState.value = AuthState.Unauthenticated
 
 
     }

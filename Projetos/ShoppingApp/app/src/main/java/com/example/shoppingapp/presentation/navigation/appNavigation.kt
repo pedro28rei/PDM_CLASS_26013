@@ -31,7 +31,7 @@ fun AppNavigation(
     ) {
         // Screen Start
         composable(Routes.START) {
-           StartScreen(navController)
+           StartScreen(navController = navController, authViewModel = authViewModel)
         }
 
         // Screen Login

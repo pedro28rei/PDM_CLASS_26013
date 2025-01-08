@@ -1,5 +1,6 @@
 package com.example.shoppingapp.presentation.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -9,6 +10,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,12 +21,22 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.shoppingapp.presentation.components.CustomButton
 import com.example.shoppingapp.presentation.navigation.Routes
+import com.example.shoppingapp.presentation.viewmodels.AuthState
 import com.example.shoppingapp.presentation.viewmodels.AuthViewModel
 
 
 // Home screen of app
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier, authViewModel: AuthViewModel, navController: NavHostController) {
+
+    val authState = authViewModel.authState.observeAsState()
+
+    LaunchedEffect(authState.value) {
+        when(authState.value){
+            is AuthState.Unauthenticated -> navController.navigate(Routes.START)
+            else -> Unit
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -43,8 +56,7 @@ fun HomeScreen(modifier: Modifier = Modifier, authViewModel: AuthViewModel, navC
                 label = "Logout",
                 color = Color.Black,
                 onClick = {
-                    // Lógica para fazer logout
-                    navController.navigate(Routes.START)
+                   authViewModel.signout()
                           },
                 modifier = Modifier
             )

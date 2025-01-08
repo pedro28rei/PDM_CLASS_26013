@@ -1,5 +1,6 @@
 package com.example.shoppingapp.presentation.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -7,13 +8,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -22,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.shoppingapp.presentation.components.CustomButton
 import com.example.shoppingapp.presentation.components.CustomTextField
 import com.example.shoppingapp.presentation.navigation.Routes
+import com.example.shoppingapp.presentation.viewmodels.AuthState
 import com.example.shoppingapp.presentation.viewmodels.AuthViewModel
 
 
@@ -33,6 +39,19 @@ fun LoginScreen(modifier: Modifier = Modifier, authViewModel: AuthViewModel, nav
     // Estados para email e senha
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    val authState = authViewModel.authState.observeAsState()
+    val context = LocalContext.current
+
+
+    LaunchedEffect(authState.value) {
+        when(authState.value){
+            is AuthState.Authenticated -> navController.navigate(Routes.HOME)
+            is AuthState.Error -> Toast.makeText(context, (authState.value as AuthState.Error).message, Toast.LENGTH_SHORT).show()
+            else -> Unit
+        }
+    }
+
 
     Box(
         modifier = Modifier
@@ -82,9 +101,9 @@ fun LoginScreen(modifier: Modifier = Modifier, authViewModel: AuthViewModel, nav
                     OutlinedTextField(
                         value = email,
                         onValueChange = { email = it},
-                        placeholder = { Text(text = "Escreva aqui") },
+                        placeholder = { Text(text = "Type here...") },
                         label = {
-                            Text(text = "Email")
+                            Text(text = "Type here...")
                         }
                     )
                 }
@@ -96,7 +115,7 @@ fun LoginScreen(modifier: Modifier = Modifier, authViewModel: AuthViewModel, nav
                         .padding(bottom = 32.dp)
                 ) {
                     Text(
-                        text = "Palavra-Passe",
+                        text = "Password",
                         color = Color.White,
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.padding(bottom = 8.dp)
@@ -104,10 +123,12 @@ fun LoginScreen(modifier: Modifier = Modifier, authViewModel: AuthViewModel, nav
                     OutlinedTextField(
                         value = password,
                         onValueChange = { password = it},
-                        placeholder = { Text(text = "Escreva aqui") },
+                        placeholder = { Text(text = "Type here...") },
                         label = {
-                            Text(text = "Password")
-                        }
+                            Text(text = "Type here...")
+                        },
+                        visualTransformation = PasswordVisualTransformation()
+
                     )
                 }
 
@@ -115,14 +136,15 @@ fun LoginScreen(modifier: Modifier = Modifier, authViewModel: AuthViewModel, nav
                 CustomButton(
                     label = "LOGIN",
                     color = Color.Black,
-                    onClick = { navController.navigate(Routes.HOME)}, // Ação de login
+                    onClick = { authViewModel.login(email, password)},
+                    //enabled = authState.value != AuthState.Loading,// Ação de login
                     modifier = Modifier
                         .padding(bottom = 16.dp)
                 )
 
                 // Clickable Text for User navigate to Regist screen without login done
                 Text(
-                    text = "Criar conta",
+                    text = "New? Create account",
                     color = Color.White,
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Bold,
@@ -135,7 +157,7 @@ fun LoginScreen(modifier: Modifier = Modifier, authViewModel: AuthViewModel, nav
 
                 // Clickable Text for User navigate to Start screen
                 Text(
-                    text = "Voltar atrás",
+                    text = "Go back",
                     color = Color.White,
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Bold,
