@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.shoppingapp.presentation.navigation.AppNavigation
+import com.example.shoppingapp.presentation.screens.TesteScreen
 import com.example.shoppingapp.presentation.screens.listUsersScreen
 import com.example.shoppingapp.presentation.viewmodels.AuthViewModel
 import com.example.shoppingapp.presentation.viewmodels.DataViewModel
@@ -26,8 +27,8 @@ class MainActivity : ComponentActivity() {
             val dataViewModel: DataViewModel = viewModel()
             val authViewModel: AuthViewModel = viewModel()
 
-            //listUsersScreen(dataViewModel = dataViewModel)
-            AppNavigation(authViewModel = authViewModel)
+            TesteScreen(dataViewModel = dataViewModel)
+            //AppNavigation(authViewModel = authViewModel)
                 }
             }
 }
