@@ -73,6 +73,7 @@ fun StartScreen(navController: NavController) {
                     .padding(bottom = 65.dp)
                     .clickable { navController.navigate(Routes.HOME) }
             )
+
         }
     }
 }

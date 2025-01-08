@@ -1,6 +1,7 @@
 package com.example.shoppingapp.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -11,11 +12,17 @@ import com.example.shoppingapp.presentation.screens.LoginScreen
 import com.example.shoppingapp.presentation.screens.PaymentScreen
 import com.example.shoppingapp.presentation.screens.PerfilScreen
 import com.example.shoppingapp.presentation.screens.ProductScreen
+import com.example.shoppingapp.presentation.screens.RegistScreen
 import com.example.shoppingapp.presentation.screens.ShoppingCarScreen
 import com.example.shoppingapp.presentation.screens.StartScreen
+import com.example.shoppingapp.presentation.viewmodels.AuthViewModel
 
 @Composable
-fun AppNavigation(navController: NavHostController = rememberNavController()) {
+fun AppNavigation(
+    modifier: Modifier = Modifier,
+    authViewModel: AuthViewModel,
+    navController: NavHostController = rememberNavController()
+) {
 
 
     NavHost(
@@ -29,12 +36,12 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
 
         // Screen Login
         composable(Routes.LOGIN) {
-            LoginScreen(navController)
+            LoginScreen(navController = navController, authViewModel = authViewModel)
         }
 
         // Screen Home
         composable(Routes.HOME) {
-            HomeScreen(navController)
+            HomeScreen(navController = navController, authViewModel = authViewModel)
         }
 
         // Screen Perfil
@@ -60,6 +67,11 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
         // Screen Payment
         composable(Routes.PAYMENT) {
             PaymentScreen(navController)
+        }
+
+        // Screen Regist
+        composable(Routes.REGIST) {
+            RegistScreen(navController = navController, authViewModel = authViewModel)
         }
     }
 }

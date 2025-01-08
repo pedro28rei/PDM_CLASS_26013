@@ -10,4 +10,5 @@ object Routes {
     const val SHOPPINGCAR = "shoppingcar"
     const val PAYMENT = "payment"
     const val LISTUSERS = "listUsers"
+    const val REGIST = "regist"
 }

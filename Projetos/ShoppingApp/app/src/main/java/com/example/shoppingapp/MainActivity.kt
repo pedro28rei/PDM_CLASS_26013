@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.shoppingapp.presentation.navigation.AppNavigation
 import com.example.shoppingapp.presentation.screens.listUsersScreen
+import com.example.shoppingapp.presentation.viewmodels.AuthViewModel
 import com.example.shoppingapp.presentation.viewmodels.DataViewModel
 
 class MainActivity : ComponentActivity() {
@@ -23,9 +24,10 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             val dataViewModel: DataViewModel = viewModel()
+            val authViewModel: AuthViewModel = viewModel()
 
-            listUsersScreen(dataViewModel = dataViewModel)
-            //AppNavigation()
+            //listUsersScreen(dataViewModel = dataViewModel)
+            AppNavigation(authViewModel = authViewModel)
                 }
             }
 }

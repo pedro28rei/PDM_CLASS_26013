@@ -15,13 +15,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.shoppingapp.presentation.components.CustomButton
 import com.example.shoppingapp.presentation.navigation.Routes
+import com.example.shoppingapp.presentation.viewmodels.AuthViewModel
 
 
 // Home screen of app
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(modifier: Modifier = Modifier, authViewModel: AuthViewModel, navController: NavHostController) {
 
     Column(
         modifier = Modifier
