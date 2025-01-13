@@ -23,10 +23,18 @@ import androidx.navigation.NavController
 import com.example.shoppingapp.R
 import com.example.shoppingapp.presentation.components.CustomButton
 import com.example.shoppingapp.presentation.navigation.Routes
+import com.example.shoppingapp.presentation.viewmodels.DataViewModel
 import com.example.shoppingapp.ui.theme.LightBlue
 
 @Composable
-fun PerfilScreen(navController: NavController) {
+fun PerfilScreen(navController: NavController, dataViewModel: DataViewModel) {
+
+
+    val usersList = dataViewModel.state.value
+    val usersLoading = dataViewModel.loading.value
+    val usersError = dataViewModel.error.value
+
+
     Box(
         modifier = Modifier
             .fillMaxSize()

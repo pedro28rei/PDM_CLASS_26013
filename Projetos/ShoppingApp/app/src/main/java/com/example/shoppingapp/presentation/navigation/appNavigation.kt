@@ -15,7 +15,6 @@ import com.example.shoppingapp.presentation.screens.ProductScreen
 import com.example.shoppingapp.presentation.screens.RegistScreen
 import com.example.shoppingapp.presentation.screens.ShoppingCarScreen
 import com.example.shoppingapp.presentation.screens.StartScreen
-import com.example.shoppingapp.presentation.screens.TesteScreen
 import com.example.shoppingapp.presentation.viewmodels.AuthViewModel
 import com.example.shoppingapp.presentation.viewmodels.DataViewModel
 import com.example.shoppingapp.presentation.viewmodels.ProductViewModel
@@ -48,12 +47,12 @@ fun AppNavigation(
 
         // Screen Home
         composable(Routes.HOME) {
-            HomeScreen(navController = navController, authViewModel = authViewModel)
+            HomeScreen(navController = navController, authViewModel = authViewModel, productViewModel = productViewModel)
         }
 
         // Screen Perfil
         composable(Routes.PERFIL) {
-            PerfilScreen(navController)
+            PerfilScreen(navController = navController, dataViewModel = dataViewModel)
         }
 
         // Screen Product
@@ -76,9 +75,6 @@ fun AppNavigation(
             RegistScreen(navController = navController, authViewModel = authViewModel)
         }
 
-        // Screen for Tests
-        composable(Routes.TESTESCREEN) {
-            TesteScreen(dataViewModel = dataViewModel, productViewModel = productViewModel, purchaseViewModel = purchaseViewModel)
-        }
+
     }
 }

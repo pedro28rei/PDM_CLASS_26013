@@ -10,5 +10,4 @@ object Routes {
     const val SHOPPINGCAR = "shoppingcar"
     const val PAYMENT = "payment"
     const val REGIST = "regist"
-    const val TESTESCREEN = "teste"
 }

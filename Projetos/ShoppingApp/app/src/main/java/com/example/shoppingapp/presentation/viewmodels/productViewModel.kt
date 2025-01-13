@@ -24,6 +24,7 @@ class ProductViewModel : ViewModel() {
         getProductsData()  // Calls the function to fetch products from Firestore
     }
 
+
     // Function that fetches product data from Firestore asynchronously.
     private fun getProductsData() {
         viewModelScope.launch {

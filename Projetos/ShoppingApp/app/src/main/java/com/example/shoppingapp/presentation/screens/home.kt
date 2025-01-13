@@ -6,6 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -23,16 +25,27 @@ import com.example.shoppingapp.presentation.components.CustomButton
 import com.example.shoppingapp.presentation.navigation.Routes
 import com.example.shoppingapp.presentation.viewmodels.AuthState
 import com.example.shoppingapp.presentation.viewmodels.AuthViewModel
+import com.example.shoppingapp.presentation.viewmodels.ProductViewModel
 
 
 // Home screen of app
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, authViewModel: AuthViewModel, navController: NavHostController) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    authViewModel: AuthViewModel,
+    navController: NavHostController,
+    productViewModel: ProductViewModel,
+) {
 
     val authState = authViewModel.authState.observeAsState()
 
+    // Products data
+    val productsList = productViewModel.state.value ?: emptyList() // Lista de produtos
+    val productsLoading = productViewModel.loading.value
+    val productsError = productViewModel.error.value
+
     LaunchedEffect(authState.value) {
-        when(authState.value){
+        when (authState.value) {
             is AuthState.Unauthenticated -> navController.navigate(Routes.START)
             else -> Unit
         }
@@ -48,16 +61,13 @@ fun HomeScreen(modifier: Modifier = Modifier, authViewModel: AuthViewModel, navC
                 .fillMaxWidth()
                 .background(Color.Red),
             horizontalArrangement = Arrangement.SpaceEvenly
-
         ) {
 
             // Button to logout the user
             CustomButton(
                 label = "Logout",
                 color = Color.Black,
-                onClick = {
-                   authViewModel.signout()
-                          },
+                onClick = { authViewModel.signout() },
                 modifier = Modifier
             )
 
@@ -73,32 +83,49 @@ fun HomeScreen(modifier: Modifier = Modifier, authViewModel: AuthViewModel, navC
             CustomButton(
                 label = "Shop Cart",
                 color = Color.Black,
-                onClick = {navController.navigate(Routes.TESTESCREEN) },
+                onClick = { navController.navigate(Routes.SHOPPINGCAR) },
                 modifier = Modifier
             )
         }
 
-
-        // Product Area
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),  //Nr of procucts per row
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            items(10) { index -> // Nr of procucts in total
-                ProductCard(
-                    productName = "Produto ${index + 1}",
-                    price = "R$ ${index * 10 + 10}",
-                    onAddToCart = {
-                    /* Lógica para adicionar ao carrinho */
-                    }
+        // Handling loading and error states
+        when {
+            productsLoading == true -> {
+                // Exibe um indicador de carregamento
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
+            }
+            productsError != null -> {
+                // Exibe a mensagem de erro
+                Text(
+                    text = "Erro ao carregar produtos",
+                    color = Color.Red,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+            else -> {
+                // Product Area
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(3),  // Número de produtos por linha
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+                    items(productsList) { product -> // Use os produtos reais
+                        ProductCard(
+                            productName = product.name, // Supondo que o produto tenha o campo `name`
+                            price = "R$ ${product.price}", // Supondo que o produto tenha o campo `price`
+                            onAddToCart = {
+                                /* Lógica para adicionar ao carrinho */
+                            }
+                        )
+                    }
+                }
             }
         }
     }
 }
-
 
 // Product box
 @Composable
@@ -118,7 +145,7 @@ fun ProductCard(productName: String, price: String, onAddToCart: () -> Unit) {
         ) {
             // Product image
             Image(
-                painter = painterResource(id = com.example.shoppingapp.R.drawable.logo),
+                painter = painterResource(id = com.example.shoppingapp.R.drawable.product),
                 contentDescription = productName,
                 modifier = Modifier
                     .height(100.dp)
@@ -134,16 +161,17 @@ fun ProductCard(productName: String, price: String, onAddToCart: () -> Unit) {
                 style = MaterialTheme.typography.bodySmall.copy(color = Color.Green)
             )
 
-            Spacer(modifier = Modifier.height(6.dp)) //
+            Spacer(modifier = Modifier.height(6.dp)) // Espaçamento
 
             // Button to add product to the cart
             CustomButton(
                 label = "Buy",
                 color = Color.Black,
-                onClick = { }, // Add Product to the cart
+                onClick = onAddToCart, // Função de callback
                 modifier = Modifier
                     .padding(bottom = 16.dp)
             )
         }
     }
 }
+
